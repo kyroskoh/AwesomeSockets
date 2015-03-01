@@ -5,14 +5,7 @@ A simple java library to make server-socket communications less painful.
 
 I was learning about servers and sockets in  *50.003: Elements of Software Construction*, when I received a problem set with many instances when the simplest solution was to reuse code for starting the servers and sockets.
 
-This was incredibly painful and verbose. To open and accept a server in Java, we have to do:
-
-```java
-ServerSocket serverSocket = new ServerSocket(4321);
-Socket clientSocket = serverSocket.accept();
-```
-
-The most frustrating part is to write the syntax to write input to the client:
+This was incredibly painful and verbose. After opening a server and accepting a client, we have to write the frustrating syntax to write and read input:
 
 ```java
 PrintWriter out =
@@ -27,7 +20,7 @@ BufferedReader in = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream()));
 ```
 
-This syntax is often unnecessary, and when we wish to extend our server to read inputs from multiple clients, we have to go through this tedious syntax again. I wanted to create better Server and Client objects that acts as a wrapper for the native java `java.net.ServerSocket;` and `java.net.Socket;`.
+This is further exacerbated when we wish to extend our server to read inputs from multiple clients with different communication protocols, and such syntax simply makes code unnecessarily messay and difficult to read. I wanted to create easier Server and Client objects that acts as a wrapper for the native java `java.net.ServerSocket;` and `java.net.Socket;`, which will maintain the features of the native objects as I need them.
 
 ## How to Use
 With AwesomeSockets, all that has to be done is create a new socket,
