@@ -8,16 +8,16 @@ I was learning about servers and sockets in  *50.003: Elements of Software Const
 This was incredibly painful and verbose. After opening a server and accepting a client, we have to write the frustrating syntax to write and read input:
 
 ```java
-PrintWriter out =
-                new PrintWriter(clientSocket.getOutputStream(), true);     
-                out.println(stdIn.readLine());
+PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);     
+out.println(stdIn.readLine());
 ```
 
 Or to read input from the client.
 
 ```java
 BufferedReader in = new BufferedReader(
-                new InputStreamReader(clientSocket.getInputStream()));
+                new InputStreamReader(
+                                clientSocket.getInputStream()));
 ```
 
 This is further exacerbated when we wish to extend our server to read inputs from multiple clients with different communication protocols, and such syntax simply makes code unnecessarily messay and difficult to read. I wanted to create easier Server and Client objects that acts as a wrapper for the native java `java.net.ServerSocket;` and `java.net.Socket;`, which will maintain the features of the native objects as I need them.
