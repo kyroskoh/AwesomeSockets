@@ -1,3 +1,5 @@
+package AwesomeSockets;
+
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
@@ -324,6 +326,19 @@ public class AwesomeServerSocket {
         if (this.debugMode) {
             System.out.println(message);
         }
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+
+        result += this.serverSocket.toString() + "\n";
+        result += "Clients: ";
+
+        for (Socket client : clients) {
+            result += client.toString() + " ";
+        }
+        return result;
     }
 }
 

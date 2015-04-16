@@ -1,3 +1,5 @@
+package AwesomeSockets;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -109,5 +111,10 @@ public class AwesomeClientSocket {
         if (this.debugMode) {
             System.out.println(message);
         }
+    }
+
+    @Override
+    public String toString() {
+        return this.serverSocket.toString();
     }
 }
