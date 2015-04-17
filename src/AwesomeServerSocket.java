@@ -1,5 +1,3 @@
-package AwesomeSockets;
-
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
@@ -7,6 +5,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+
 
 
 /**
@@ -124,7 +123,7 @@ public class AwesomeServerSocket {
     }
 
 
-//    Accessor methods to get the writers and readers. should not be needed
+    //    Accessor methods to get the writers and readers. should not be needed
     @Deprecated
     public PrintWriter getWriterForClient(int index) {
         return this.clientWriters.get(index);
@@ -180,6 +179,37 @@ public class AwesomeServerSocket {
 
     }
 
+    public void sendByteArrayForClient(int index, byte[] myByteArray) throws IOException {
+
+//        if (len < 0)
+//            throw new IllegalArgumentException("Negative length not allowed");
+//        if (start < 0 || start >= myByteArray.length)
+//            throw new IndexOutOfBoundsException("Out of bounds: " + start);
+//        // Other checks if needed.
+
+        // May be better to save the streams in the support class;
+        // just like the socket variable.
+        OutputStream out = this.getServerOutputStreamForClient(index);
+        DataOutputStream dos = new DataOutputStream(out);
+
+        dos.writeInt(myByteArray.length);
+        if (myByteArray.length > 0) {
+            dos.write(myByteArray, 0, myByteArray.length);
+        }
+    }
+
+    public byte[] readByteArrayForClient(int index) throws IOException {
+        InputStream in = this.getServerInputStreamForClient(index);
+        DataInputStream dis = new DataInputStream(in);
+
+        int len = dis.readInt();
+        byte[] data = new byte[len];
+        if (len > 0) {
+            dis.readFully(data);
+        }
+        return data;
+    }
+
     /**
      * DOES NOT WORK PROPERLY IF YOU ADD CLIENTS AFTER RUNNING THIS ONCE
      * @return
@@ -194,83 +224,83 @@ public class AwesomeServerSocket {
 
     }
 
-    /**
-     * Starts all the clientListeners with the default listener
-     */
-    public void startAllClientListeners() {
-        this.startAllClientListenersForListener(DefaultClientListenerRunnable.class);
-    }
+//    /**
+//     * Starts all the clientListeners with the default listener
+//     */
+//    public void startAllClientListeners() {
+//        this.startAllClientListenersForListener(DefaultClientListenerRunnable.class);
+//    }
+//
+//    /**
+//     * Starts all listeners with a Runnable class parameter
+//     * @param listener e.g. ClientListener.class
+//     */
+//    public void startAllClientListenersForListener(Class listener) {
+//        for (int i = 0; i < this.clients.size(); i++) {
+//
+//            // Return if the iterable has been deleted
+//            if (this.clients.get(i) == null) {
+//                return;
+//            }
+//            this.startListenerForClient(listener, i);
+//        }
+//    }
 
-    /**
-     * Starts all listeners with a Runnable class parameter
-     * @param listener e.g. ClientListener.class
-     */
-    public void startAllClientListenersForListener(Class listener) {
-        for (int i = 0; i < this.clients.size(); i++) {
-
-            // Return if the iterable has been deleted
-            if (this.clients.get(i) == null) {
-                return;
-            }
-            this.startListenerForClient(listener, i);
-        }
-    }
-
-    /**
-     * Starts only the client at index for the default listener
-     * @param index
-     */
-    public void startListenerForClient(int index) {
-
-        startListenerForClient(DefaultClientListenerRunnable.class, index);
-    }
-
-    /**
-     * Starts listener for client at index with a Runnable class parameter
-     * @param listener a runnable, call Class.class
-     * @param index client number
-     */
-    public void startListenerForClient(Class listener, int index) {
-//        Socket client = this.clients.get(index);
-
-        Runnable listenerInstance = null;
-
-        if (this.clientListenerThreads == null) {
-            this.clientListenerThreads = new ArrayList<Thread>();
-        }
-
-
-        // How do i pass Class as a parameter in java?
-        // http://stackoverflow.com/a/4873003
-
-        // Can I use Class.newInstance() with constructor arguments?
-        // http://stackoverflow.com/a/234617
-
-        try {
-
-            Class[] cArg = new Class[2]; //Our constructor has 2 arguments
-            cArg[0] = AwesomeServerSocket.class;
-            cArg[1] = int.class; //Third argument is of *primitive* type int
-
-            listenerInstance = (Runnable)listener.getDeclaredConstructor(cArg).newInstance(this, index);
-            Thread clientListenerThread = new Thread(listenerInstance);
-            this.clientListenerThreads.add(clientListenerThread);
-            clientListenerThread.start();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            System.err.println("Cannot start listener.");
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.err.println("Cannot start listener.");
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            System.err.println("Cannot start listener.");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            System.err.println("Cannot start listener.");
-        }
-
-    }
+//    /**
+//     * Starts only the client at index for the default listener
+//     * @param index
+//     */
+//    public void startListenerForClient(int index) {
+//
+//        startListenerForClient(DefaultClientListenerRunnable.class, index);
+//    }
+//
+//    /**
+//     * Starts listener for client at index with a Runnable class parameter
+//     * @param listener a runnable, call Class.class
+//     * @param index client number
+//     */
+//    public void startListenerForClient(Class listener, int index) {
+////        Socket client = this.clients.get(index);
+//
+//        Runnable listenerInstance = null;
+//
+//        if (this.clientListenerThreads == null) {
+//            this.clientListenerThreads = new ArrayList<Thread>();
+//        }
+//
+//
+//        // How do i pass Class as a parameter in java?
+//        // http://stackoverflow.com/a/4873003
+//
+//        // Can I use Class.newInstance() with constructor arguments?
+//        // http://stackoverflow.com/a/234617
+//
+//        try {
+//
+//            Class[] cArg = new Class[2]; //Our constructor has 2 arguments
+//            cArg[0] = AwesomeServerSocket.class;
+//            cArg[1] = int.class; //Third argument is of *primitive* type int
+//
+//            listenerInstance = (Runnable)listener.getDeclaredConstructor(cArg).newInstance(this, index);
+//            Thread clientListenerThread = new Thread(listenerInstance);
+//            this.clientListenerThreads.add(clientListenerThread);
+//            clientListenerThread.start();
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//            System.err.println("Cannot start listener.");
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//            System.err.println("Cannot start listener.");
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//            System.err.println("Cannot start listener.");
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//            System.err.println("Cannot start listener.");
+//        }
+//
+//    }
 
     /**
      * Returns true if there are still threads running
@@ -340,38 +370,8 @@ public class AwesomeServerSocket {
         }
         return result;
     }
-}
 
-
-class DefaultClientListenerRunnable implements Runnable {
-
-    private final AwesomeServerSocket serverSocket;
-
-    private final ArrayList<String> messages;
-    private final int clientNumber;
-
-    public DefaultClientListenerRunnable(AwesomeServerSocket serverSocket, int clientNumber) {
-        this.serverSocket = serverSocket;
-        this.messages = new ArrayList<String>();
-        this.clientNumber = clientNumber;
-    }
-
-    @Override
-    public void run() {
-        try {
-            while (true) {
-                this.serverSocket.readMessageLineForClient(this.clientNumber);
-            }
-
-
-            //... close socket, etc.
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+    public static void main(String[] args) {
 
     }
 }
