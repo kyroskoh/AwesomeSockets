@@ -1,3 +1,5 @@
+package AwesomeSockets;
+
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
@@ -279,7 +281,7 @@ public class AwesomeServerSocket {
 //        try {
 //
 //            Class[] cArg = new Class[2]; //Our constructor has 2 arguments
-//            cArg[0] = AwesomeServerSocket.class;
+//            cArg[0] = AwesomeSockets.AwesomeServerSocket.class;
 //            cArg[1] = int.class; //Third argument is of *primitive* type int
 //
 //            listenerInstance = (Runnable)listener.getDeclaredConstructor(cArg).newInstance(this, index);

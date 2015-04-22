@@ -25,7 +25,7 @@ This is further exacerbated when we wish to extend our server to read inputs fro
 ## How to Use
 With AwesomeSockets, all that has to be done is create a new socket,
 ```java
-AwesomeServerSocket awesomeServer = new AwesomeServerSocket(4321);
+AwesomeSockets.AwesomeServerSocket awesomeServer = new AwesomeSockets.AwesomeServerSocket(4321);
 awesomeServer.debugMode = false;
 ```
 
@@ -60,7 +60,7 @@ awesomeServer.startAllClientListenersForListener(DefaultClientListenerRunnable.c
 Similarly for the server, simply call:
 
 ```java
-AwesomeClientSocket awesomeClient = new AwesomeClientSocket("localhost", 4321);
+AwesomeSockets.AwesomeClientSocket awesomeClient = new AwesomeSockets.AwesomeClientSocket("localhost", 4321);
 awesomeClient.sendMessageLine(messageToServer); // send message
 String receivedMessage = awesomeClient.readMessageLine() // read message
 ```
